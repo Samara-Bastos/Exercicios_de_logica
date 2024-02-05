@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="iso-8859-1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Exercicios</title>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    </head>
+    <body class="conteudo">
+        <div class="card">
+            <span class="scroll"> 
+                <form>
+                    <div class="mb-3">  
+                        <label class="label" id="basic-addon1">Digite um número</label>
+                        <input type="number" id="info" class="form-control" placeholder="0" aria-label="numero"/>
+                    </div>
+                    <button type="button" id="envio10">Enviar</button>
+                </form>
+            </span>
+        </div>
+
+        <div class="card">
+            <span class="scroll"> 
+                <form>
+                    <div class="mb-3">  
+                        <label class="label" id="basic-addon1">Digite sua idade</label>
+                        <input type="number" id="idade" class="form-control" placeholder="0" aria-label="numero"/>
+                    </div>
+                    <button type="button" id="envioIdade">Enviar</button>
+                </form>
+            </span>
+        </div>
+
+        <div class="card">
+            <span class="scroll"> 
+                <form>
+                    <div class="mb-3">  
+                        <label class="label" id="basic-addon1">Digite um número para saber sua tabuada</label>
+                        <input type="number" id="numTabuada" class="form-control" placeholder="0" aria-label="numero"/>
+                    </div>
+                    <button type="button" id="envioTabuada">Enviar</button>
+                    <div id="resultTabuada" class="mt-3"></div>
+                </form>
+            </span>
+        </div>
+
+        <div class="card">
+            <span class="scroll"> 
+                <form>
+                    <div class="mb-3 mt-3">  
+                        <input type="text" id="nomeProduto" placeholder="Nome do produto" class="form-control" />
+                        <input type="text" id="precoProduto" placeholder="Preço do produto" class="form-control" />
+                        <input type="number" id="qntProduto" placeholder="Quantidade" class="form-control" />
+                    </div>
+                    <button type="button" id="envioProduto">Enviar</button>
+                    <button type="button" id="btnLimpar">Limpar</button>
+                    <div class="mt-3"> 
+                        <span>Lista de produtos</span>
+                        <div id="resultProduto"></div>
+                        <span id="totalProduto"></span>
+                    </div>
+                </form>
+            </span>
+        </div>
+    </body>
+</html>
+
+<script> 
+    $("#envio10").click(function() {
+        let info = $("#info").val();
+        if(info == 10){
+            Swal.fire({
+                title: "Parabéns!",
+                text: "Você digitou o número 10!",
+                icon: "success"
+            });
+        }
+    });
+    
+    $("#btnReload").click(function() {
+        // Recarrega a página
+        location.reload();
+    });
+    
+    $("#envioIdade").click(function() {
+        let idade = $("#idade").val();
+        if(idade >= 18){
+            Swal.fire({
+                text: "Oba!! você já é maior de idade",
+            });
+        }else{
+            Swal.fire({
+                text: "Huum, você ainda não é maior de idade",
+            });
+        }
+    });
+    
+    $("#envioTabuada").click(function() {
+        //Apago o conteúdo da div caso exista.
+        $('#resultTabuada').empty();
+
+        let numTabuada = $("#numTabuada").val();
+        let result = 0;
+        let i = 0;
+        let ultimoCalculo = numTabuada *10;
+
+        while (ultimoCalculo != result) {
+            i++
+            result = numTabuada * i;
+            $("#resultTabuada").append("<span>"+numTabuada+" X "+i+" = "+result+"</span>");
+        }
+    });
+
+    let listaProdutos = [];
+
+    $("#envioProduto").click(function() {
+        // Apago o conteudo anterior para subscrever
+        $('#totalProduto').empty();
+        $("#resultProduto").empty();
+
+        let nomeProduto = $("#nomeProduto").val();
+        let precoProduto = parseFloat($("#precoProduto").val());  // Converta para número
+        let qntProduto = parseInt($("#qntProduto").val());  // Converta para número inteiro
+        let valorTotal = 0;
+        let valorComDesconto;
+        let porcentagem;
+
+        if (qntProduto <= 10) {
+            valorComDesconto = precoProduto;
+        } else if (qntProduto > 10 && qntProduto <= 20) {
+            porcentagem = precoProduto * 0.1;
+            valorComDesconto = precoProduto - porcentagem;
+        } else if (qntProduto > 20 && qntProduto <= 50) {
+            porcentagem = precoProduto * 0.2;
+            valorComDesconto = precoProduto - porcentagem;
+        } else if (qntProduto > 50) {
+            porcentagem = precoProduto * 0.25;
+            valorComDesconto = precoProduto - porcentagem;
+        }
+
+        // Adicione o item atual ao array ou objeto
+        listaProdutos.push({
+            nome: nomeProduto,
+            desconto: valorComDesconto
+        });
+
+        $.each(listaProdutos, function(index, produto) {
+            $("#resultProduto").append("<span> Nome do produto: " + produto.nome + ", Valor: " + produto.desconto + "</span><br>");
+
+            valorTotal +=produto.desconto;
+        });
+
+        $("#totalProduto").append("<span>Total : " + valorTotal + " </span>");
+    });
+
+    $("#btnLimpar").click(function() {
+        // Recarrega a página
+        location.reload();
+    });
+
+</script>
